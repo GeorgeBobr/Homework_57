@@ -1,3 +1,38 @@
 from django.db import models
 
-# Create your models here.
+class Type(models.Model):
+    title = models.CharField(max_length=50, verbose_name="Название", unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.id} {self.title}"
+
+    class Meta:
+        db_table = "Types"
+        verbose_name = "Тип"
+        verbose_name_plural = "Типы"
+class Status(models.Model):
+    title = models.CharField(max_length=50, verbose_name="Название", unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.id} {self.title}"
+
+    class Meta:
+        db_table = "Status"
+        verbose_name = "Статус"
+        verbose_name_plural = "Статусы"
+
+class Task(models.Model):
+    summary = models.CharField(max_length=50, verbose_name="Заголовок", unique=True, null=False, blank=False)
+    description = models.TextField(max_length=2000, verbose_name='Описание')
+    status = models.ForeignKey(Status, on_delete=models.PROTECT)
+    type = models.ManyToManyField(Type)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+    def __str__(self):
+        return f"{self.id} {self.summary}"
+
+    class Meta:
+        db_table = "Tasks"
+        verbose_name = "Задача"
+        verbose_name_plural = "Задачи"
