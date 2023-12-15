@@ -7,7 +7,7 @@ class Type(models.Model):
         return f"{self.id} {self.title}"
 
     class Meta:
-        db_table = "Types"
+        db_table = "Type"
         verbose_name = "Тип"
         verbose_name_plural = "Типы"
 class Status(models.Model):
@@ -25,7 +25,7 @@ class Task(models.Model):
     summary = models.CharField(max_length=50, verbose_name="Заголовок", unique=True, null=False, blank=False)
     description = models.TextField(max_length=2000, verbose_name='Описание')
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
-    type = models.ManyToManyField(Type)
+    types = models.ManyToManyField(Type)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
@@ -33,6 +33,6 @@ class Task(models.Model):
         return f"{self.id} {self.summary}"
 
     class Meta:
-        db_table = "Tasks"
+        db_table = "Task"
         verbose_name = "Задача"
         verbose_name_plural = "Задачи"
