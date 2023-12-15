@@ -12,7 +12,7 @@ class StatusForm(forms.Form):
 
 class TaskForm(forms.Form):
     summary = forms.CharField(max_length=50, required=True, label="Заголовок")
-    description = forms.CharField(max_length=2000, required=True, label="Описание",
+    description = forms.CharField(max_length=2000, required=False, label="Описание",
                                   widget=widgets.Textarea(attrs={"cols": 30, "rows": 5, "class": "test"}))
     type = forms.ModelMultipleChoiceField(queryset=Type.objects.all(), label="Типы")
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Статусы")
