@@ -30,7 +30,7 @@ def at_least_5_summary(value):
 
 class TaskForm(forms.Form):
     summary = forms.CharField(max_length=50, required=True, label="Заголовок",
-                              validators=[validate_summary, at_least_5_summary()])
+                              validators=[validate_summary, at_least_5_summary])
     description = forms.CharField(max_length=2000, required=False, label="Описание",
                                   widget=widgets.Textarea(attrs={"cols": 30, "rows": 5, "class": "test"}),
                                   validators=[validate_description])
