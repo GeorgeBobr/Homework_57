@@ -11,8 +11,12 @@ def validate_summary(value):
         raise ValidationError("Заголовок содержит бранные слова")
 
 def validate_description(value):
-    if len(value) < 15:
-        raise ValidationError("Ваше описание должно содержать не менее 15 символов, иначе зачем вы сюда зашли")
+    if len(value) < 10:
+        raise ValidationError("Ваше описание должно содержать не менее 10 символов")
+    elif "bad_word" in value.lower():
+        raise ValidationError("Описание не должно содержать бранных слов")
+
+class No_specific_c
 
 class TaskForm(forms.Form):
     summary = forms.CharField(max_length=50, required=True, label="Заголовок")
