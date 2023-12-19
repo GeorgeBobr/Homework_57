@@ -23,7 +23,7 @@ class Status(models.Model):
 
 class Task(models.Model):
     summary = models.CharField(max_length=50, verbose_name="Заголовок", unique=True, null=False, blank=False)
-    description = models.TextField(max_length=2000, verbose_name='Описание')
+    description = models.TextField(max_length=2000, blank=True, null=True, verbose_name='Описание')
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
     types = models.ManyToManyField(Type)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
