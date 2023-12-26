@@ -3,8 +3,7 @@ from django.forms import widgets
 from django.core.validators import BaseValidator
 from django.core.exceptions import ValidationError
 
-from webapp.models import Type
-from webapp.models import Status
+from webapp.models import Type, Status, Project
 
 def validate_summary(value):
     if "bad_word" in value.lower():
@@ -36,6 +35,15 @@ class TaskForm(forms.Form):
                                   validators=[validate_description])
     types = forms.ModelMultipleChoiceField(queryset=Type.objects.all(), label="Типы")
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Статусы")
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['start_data', 'end_data', 'title', 'description']
+
+class SimpleSearchForm(forms.Form):
+    search = forms.CharField(max_length=100, required=False, label='Найти')
 
 
 class TypeForm(forms.Form):
