@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Create project{% endblock %}
+{% block menu %}
+    <a class="nav-link" aria-current="page" href="{% url 'webapp:project_list' %}">Список проектов</a>
+{% endblock %}
+
+{% block content %}
+    {% load static %}
+
+     <style>
+        body {
+            color: white;
+        }
+        .card {
+            background-color: white;
+            opacity: 0.7;
+        }
+        .
+        @media only screen and (max-width: 600px) {
+            body {
+                background-image: url('https://images8.alphacoders.com/133/1331544.png');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+        }
+        @media only screen and (min-width: 601px) {
+            body {
+                background-image: url('https://images8.alphacoders.com/133/1331544.png');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+        }
+
+    </style>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% include 'partial/form.html' with value_submit='Create' %}
+
+    </form>
+{% endblock %}
