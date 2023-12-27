@@ -49,10 +49,10 @@ class ProjectListView(ListView):
 class ProjectDetailView(DetailView):
     model = Project
     template_name = 'projects/project_detail.html'
+    context_object_name = 'project'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         project = self.object
         tasks = project.task_set.all()
         context['tasks'] = tasks
@@ -90,3 +90,4 @@ class ProjectDeleteView(DeleteView):
     model = Project
     template_name = 'projects/project_delete.html'
     success_url = reverse_lazy('webapp:project_list')
+
