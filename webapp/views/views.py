@@ -1,38 +1,26 @@
+from audioop import reverse
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, UpdateView, DeleteView, DetailView
+from django.views.generic import TemplateView, UpdateView, DeleteView, DetailView, CreateView
 from django.urls import reverse_lazy
 from webapp.forms import TaskForm
 from webapp.models import Task, Project
 
-
-class TaskCreateView(View):
+class TaskCreateView(CreateView):
+    model = Task
     template_name = 'tasks/create.html'
+    form_class = TaskForm
 
-    def get(self, request, *args, **kwargs):
-        form = TaskForm()
-        return render(request, self.template_name, {"form": form})
+    def form_valid(self, form):
+        project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
+        task = form.save(commit=False)
+        task.project = project
+        task.save()
+        return redirect('webapp:project_detail', pk=project.pk)
 
-    def post(self, request, *args, **kwargs):
-        form = TaskForm(data=request.POST)
-        if form.is_valid():
-            project_pk = kwargs.get('pk')
-            task = Task.objects.create(
-                summary=form.cleaned_data.get("summary"),
-                description=form.cleaned_data.get("description"),
-                status=form.cleaned_data.get("status")
-            )
-            project = Project.objects.get(pk=project_pk)
-            project.task_set.add(task)
-
-            types = form.cleaned_data.get("type")
-            if types:
-                task.type.set(types)
-            return redirect("webapp:project_detail", pk=project_pk)
-        else:
-            print(form.errors)
-            return render(request, self.template_name, {"form": form})
-
+    def get_success_url(self):
+        return reverse('webapp:project_detail', kwargs={'pk': self.kwargs['pk']})
 
 class TaskUpdateView(UpdateView):
     template_name = 'tasks/update.html'
