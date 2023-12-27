@@ -2,9 +2,9 @@
 
 {% block title %}{{ task.summary }}{% endblock %}
 {% block menu %}
-    <a class="nav-link" aria-current="page" href="{% url 'task_list' %}">На главную</a>
-    <a class="nav-link" aria-current="page" href="{% url 'update' id=task.id %}">Редактировать</a>
-    <a class="nav-link" aria-current="page" href="{% url 'delete' id=task.id %}">Удалить</a>
+    <a class="nav-link" aria-current="page" href="{% url 'webapp:project_detail' pk.project.pk %}">На главную</a>
+    <a class="nav-link" aria-current="page" href="{% url 'tasks/update' id=task.id %}">Редактировать</a>
+    <a class="nav-link" aria-current="page" href="{% url 'tasks/delete' id=task.id %}">Удалить</a>
 {% endblock %}
 
 {% block content %}
