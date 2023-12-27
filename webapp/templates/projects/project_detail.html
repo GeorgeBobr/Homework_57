@@ -2,7 +2,7 @@
 {% block title %}Project Detail{% endblock %}
 
 {% block menu %}
-    <a class="nav-link" aria-current="page" href="{% url 'webapp:create' %}">Создать задачу</a>
+  <a class="nav-link" aria-current="page" href="{% url 'webapp:create' pk=project.pk %}">Создать задачу</a>
 {% endblock %}
 
 {% block content %}
