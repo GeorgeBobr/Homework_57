@@ -42,9 +42,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ task.summary }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">{{ task.description }}</h6>
-                        <a href="{% url 'tasks/detail' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Подробнее</a>
-                        <a href="{% url 'tasks/update' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Редактировать</a>
-                        <a href="{% url 'tasks/delete' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Удалить</a>
+                        <a href="{% url 'webapp:detail' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Подробнее</a>
+                        <a href="{% url 'webapp:update' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Редактировать</a>
+                        <a href="{% url 'webapp:delete' pk=task.pk %}" class="card-link" style="text-decoration: none; color: darkblue">Удалить</a>
                     </div>
                 </div>
             </div>
