@@ -3,7 +3,7 @@ from django.forms import widgets
 from django.core.validators import BaseValidator
 from django.core.exceptions import ValidationError
 
-from webapp.models import Type, Status, Project
+from webapp.models import Type, Status, Project, Task
 
 def validate_summary(value):
     if "bad_word" in value.lower():
@@ -27,15 +27,10 @@ def at_least_5_summary(value):
     if len(value) < 5:
         raise ValidationError('Заголовок должен содержать не менее 5 символов')
 
-class TaskForm(forms.Form):
-    summary = forms.CharField(max_length=50, required=True, label="Заголовок",
-                              validators=[validate_summary, at_least_5_summary])
-    description = forms.CharField(max_length=2000, required=False, label="Описание",
-                                  widget=widgets.Textarea(attrs={"cols": 30, "rows": 5, "class": "test"}),
-                                  validators=[validate_description])
-    types = forms.ModelMultipleChoiceField(queryset=Type.objects.all(), label="Типы")
-    status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Статусы")
-
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['summary', 'description', 'status', 'types']
 
 class ProjectForm(forms.ModelForm):
     class Meta:
