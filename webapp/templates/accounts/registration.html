@@ -1,11 +1,20 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
+{% load static %}
 {% block title %}Регистрация{% endblock %}
-{% block menu %}<a class="nav-link" aria-current="page"  href="{% url 'webapp:project_list' %}">На главную</a>{% endblock %}
 
 {% block content %}
-<h1>Регистрация</h1>
-
-    {% include 'partial/form.html' with value_submit='Зарегистрироваться'  form_method='post' %}
-
+    <div class="container my-4">
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-body d-flex flex-column align-items-center">
+                <form method="post" class="w-100">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-danger w-100 font-weight-bold" type="submit">Sign Up</button>
+                </form>
+                <div class="container border border-lightgrey justify-content-md-center p-3 text-center mt-2">
+                    Have an account? <a href="{% url 'accounts:login' %}" class="font-weight-bold">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
