@@ -82,7 +82,7 @@ class ProjectDetailView(DetailView):
         context['tasks'] = tasks
         return context
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     template_name = 'projects/project_create.html'
     form_class = ProjectForm
     model = Project
@@ -94,7 +94,7 @@ class ProjectCreateView(CreateView):
         form.save_m2m()
         return redirect('webapp:project_list', pk=self.project.pk)
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'projects/project_update.html'
     form_class = ProjectForm
     permission_required = 'webapp.edit_project'
