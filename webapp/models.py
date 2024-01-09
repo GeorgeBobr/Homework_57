@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
 
 class Type(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название", unique=True, null=False, blank=False)
@@ -28,7 +29,7 @@ class Project(models.Model):
     end_data = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=50, verbose_name='Название', null=False, blank=False)
     description = models.TextField(max_length=2000, verbose_name='Описание')
-    user = models.ManyToManyField(User, related_name='projects', blank=True)
+    users = models.ManyToManyField(get_user_model(), related_name='projects', verbose_name='User')
 
 class Task(models.Model):
     summary = models.CharField(max_length=50, verbose_name="Заголовок", unique=True, null=False, blank=False)
@@ -37,7 +38,7 @@ class Task(models.Model):
     types = models.ManyToManyField(Type)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.id} {self.summary}"
