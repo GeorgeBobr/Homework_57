@@ -16,7 +16,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
         task = form.save(commit=False)
         task.project = project
-        task.users = self.request.user
+        task.author = self.request.user
         task.save()
         return redirect('webapp:project_detail', pk=project.pk)
 
@@ -27,19 +27,21 @@ class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'tasks/update.html'
     model = Task
     form_class = TaskForm
-    permission_required = 'webapp.edit_task'
+
     def has_permission(self):
         return super().has_permission() or self.request.user == self.get_object().author
 
     def get_success_url(self):
-        return reverse('webapp:article_view', kwargs={'pk': self.object.article.pk})
+        return reverse('webapp:project_detail', kwargs={'pk': self.object.project.pk})
+
 
 class TaskDeleteView(PermissionRequiredMixin, DeleteView):
     model = Task
     template_name = 'tasks/delete.html'
+    permission_required = 'webapp.delete_task'
 
     def has_permission(self):
-        return super().has_permission() or self.request.user == self.get_object().author
+        return super().has_permission() or self.request.user == self.get_object().user
 
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
@@ -47,11 +49,12 @@ class TaskDeleteView(PermissionRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('webapp:project_detail', kwargs={'pk': self.object.project.pk})
 
-class TaskDetailView(TemplateView):
+
+class TaskDetailView(DetailView):
     model = Task
     template_name = 'tasks/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.object.comments.order_by('-created_at')
+        context['tasks'] = self.object.tasks.order_by('-created_at')
         return context
