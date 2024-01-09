@@ -16,7 +16,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         project = get_object_or_404(Project, pk=self.kwargs.get('pk'))
         task = form.save(commit=False)
         task.project = project
-        task.author = self.request.user
+        task.user = self.request.user
         task.save()
         return redirect('webapp:project_detail', pk=project.pk)
 
@@ -29,7 +29,7 @@ class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = TaskForm
 
     def has_permission(self):
-        return super().has_permission() or self.request.user == self.get_object().author
+        return super().has_permission() or self.request.user == self.get_object().users
 
     def get_success_url(self):
         return reverse('webapp:project_detail', kwargs={'pk': self.object.project.pk})
