@@ -1,11 +1,35 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import TemplateView
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from webapp.forms import ProjectForm, SimpleSearchForm
-from webapp.models import Project
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.utils.http import urlencode
+from django.contrib.auth.models import User
 from django.db.models import Q
+from webapp.models import Project
+from webapp.forms import ProjectForm, SimpleSearchForm
+from django.views.generic import View, FormView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth import get_user_model
+
+class ProjectUserView(View):
+    template_name = 'tracker/project_users.html'
+
+    def get(self, request, pk):
+        project = get_object_or_404(Project, pk=pk)
+        users = get_user_model().objects.exclude(projects=project)
+        return render(request, self.template_name, {'project': project, 'users': users})
+
+class ProjectUserAddView(View):
+    def post(self, request, pk, user_pk):
+        project = get_object_or_404(Project, pk=pk)
+        user = get_object_or_404(get_user_model(), pk=user_pk)
+        project.users.add(user)
+        return redirect('webapp:project_users', pk=pk)
+
+class ProjectUserRemoveView(View):
+    def post(self, request, pk, user_pk):
+        project = get_object_or_404(Project, pk=pk)
+        user = get_object_or_404(get_user_model(), pk=user_pk)
+        project.users.remove(user)
+        return redirect('webapp:project_users', pk=pk)
 
 class ProjectListView(ListView):
     model = Project
@@ -62,12 +86,21 @@ class ProjectCreateView(CreateView):
     template_name = 'projects/project_create.html'
     form_class = ProjectForm
     model = Project
-    success_url = reverse_lazy('webapp:project_list')
 
+    def form_valid(self, form):
+        self.project = form.save(commit=False)
+        self.project.users = self.request.user
+        self.project.save()
+        form.save_m2m()
+        return redirect('webapp:project_list', pk=self.project.pk)
 
 class ProjectUpdateView(UpdateView):
     template_name = 'projects/project_update.html'
     form_class = ProjectForm
+    permission_required = 'webapp.edit_project'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().users
 
     def dispatch(self, request, *args, **kwargs):
         self.project = self.get_object()
