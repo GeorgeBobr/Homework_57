@@ -29,8 +29,11 @@
                        href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Вход</a>
                 {% else %}
                     <span class="text-success me-3">{{ request.user }}</span>
-                    <a class="text-success-emphasis text-decoration-none" aria-current="page"
-                       href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">Выход</a>
+
+                    <form method="post" action="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-success-emphasis text-decoration-none" aria-current="page">Выход</button>
+                    </form>
                 {% endif %}
             </div>
         </div>
