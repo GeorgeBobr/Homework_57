@@ -1,3 +1,5 @@
+<form action="{{ action_url }}" method="{{ form_method }}">
+
 {% csrf_token %}
 {% for error in form.non_field_errors %}
 
@@ -5,37 +7,6 @@
 
 {% endfor %}
 
-{#<label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label><br/>#}
-{#{{ form.title }}#}
-{##}
-{##}
-{#    {% for error in form.title.errors %}#}
-{#    	<p class="text-danger">{{ error }}</p>#}
-{#    {% endfor %}#}
-{##}
-{##}
-{#<br/>#}
-{##}
-{#<label for="{{ form.content.id_for_label }}">{{ form.content.label }}:</label><br/>#}
-{#{{ form.content }}#}
-{##}
-{##}
-{#    {% for error in form.content.errors %}#}
-{#    	<p class="text-danger">{{ error }}</p>#}
-{#    {% endfor %}#}
-{##}
-{##}
-{#<br/>#}
-{#<label for="{{ form.author.id_for_label }}">{{ form.author.label }}:</label><br/>#}
-{#{{ form.author }}#}
-{##}
-{##}
-{#    {% for error in form.author.errors %}#}
-{#    	<p class="text-danger">{{ error }}</p>#}
-{#    {% endfor %}#}
-{##}
-{##}
-{#<br/>#}
 {% for field in form %}
     <label for="{{ field.id_for_label }}">{{ field.label }}:</label><br/>
     {{ field }}
@@ -51,3 +22,4 @@
 
 
 <input type="submit" value="{{ value_submit }}"/>
+</form>
